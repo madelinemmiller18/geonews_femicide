@@ -97,7 +97,7 @@ if __name__ == "__main__":
 
     #set up source path and output path
     source_path= '../data/repository_queries/500000'
-    output_path= '../data/topk/'
+    output_path= '../data/processed/'
 
     #list which queries were used for file naming later
     queries = "7-14_22-24_26-27_29-32" 

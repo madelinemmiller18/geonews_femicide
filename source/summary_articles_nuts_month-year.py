@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
     #set up source path and output path
     source_path= '../data/repository_database/'
-    output_path= '../data/summary/'
+    output_path= '../data/processed/'
 
     # Database connection setup
     conn = sqlite3.connect(f'{source_path}CommonCrawlNews.db')
