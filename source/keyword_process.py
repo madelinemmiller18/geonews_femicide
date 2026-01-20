@@ -1,47 +1,11 @@
 # Filename: topkresults.py
 # Author: Madeline Miller
 # Created: 2026-12-01
-# Description: 
+# Description: parses json data and returns a csv with rows for each json data item
 
 #import libraries
 import pandas as pd
 import json
-
-#define functions
-def load_csv(name, path, storage_dict):
-    try:
-        df = pd.read_csv(path)
-        print("df original")
-        print(df.sort_values(by="cos_dist", ascending=True).head(10))
-        #add to df dictionary
-        storage_dict[name] = df 
-
-    except FileNotFoundError:
-        print(f"Warning: File not found at {path}")
-
-#Function to split up JSON information
-#{"url":"https://www.ndr.de/kultur/Femizide-in-Deutschland-Fallzahlen-gehen-2021-leicht-zurueck,femizid100.html",
-#"headline":"Femicides in Germany: A woman is killed almost every day",
-#"timestamp":"2026-01-14T21:44:32.364Z",
-#"total":91,
-#"found":[],
-#"notFound":[]}
-def parse_json(jsonString):
-    results = []
-    data = json.loads(jsonString)
-    results.append({
-        'url': data['url'],
-        'headline': data['headline'],
-        'timestamp': data['timestamp'],
-        'total_keywords': data['total'],
-        'found_count': len(data['found']),
-        'not_found_count': len(data['notFound']),
-        'found_keywords': ', '.join(data['found']),
-        'not_found_keywords': ', '.join(data['notFound'])
-        })
-    return results
-    
-
 
 # ------------ Main Script ------------
 if __name__ == "__main__":
@@ -57,11 +21,18 @@ if __name__ == "__main__":
     parsed_data = [] #empty list
 
     for idx, row in df_manual_check.iterrows():
+
+        json_raw = row['json']
+
+        #rows with no json
+        if pd.isna(json_raw): 
+            continue
+
         try:
             data = json.loads(row['json'])
 
             parsed_data.append({
-                'id': row['id'],
+                'id': row['article_id'],
                 'url': data['url'],
                 'headline': data['headline'],
                 'timestamp': data['timestamp'],
@@ -77,15 +48,15 @@ if __name__ == "__main__":
 
 json_df = pd.DataFrame(parsed_data)
 print(json_df.head())
-
-json_df.to_csv('parsed_results.csv', index=False)
+json_df.to_csv(f'{output_path}json_parsed.csv', index=False)
 
 print(df_manual_check.head())
 
 # Merge the data
 df_merged = df_manual_check.merge(
     json_df,
-    on='id',
+    right_on='id',
+    left_on='article_id',
     how='left',  # Keep all rows from original
     indicator=True  # Add column showing merge status
 )
@@ -102,10 +73,10 @@ print()
 df_merged['has_keyword_data'] = df_merged['_merge'] == 'both'
 
 # Remove the indicator column if you don't want it
-# df_merged = df_merged.drop('_merge', axis=1)
+df_merged = df_merged.drop('_merge', axis=1)
 
 # Save results
-df_merged.to_csv(f'{output_path}parsed_all_keywords.csv', index=False)
+df_merged.to_csv(f'{output_path}manual-tag_all_parsedson.csv', index=False)
 
 
 
