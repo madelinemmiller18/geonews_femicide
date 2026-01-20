@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Keyword Checker Bookmarklet</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .keywords-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .keyword-row {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+            align-items: center;
+        }
+        .keyword-input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        .keyword-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .remove-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .remove-btn:hover {
+            background: #dc2626;
+        }
+        .add-btn {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .add-btn:hover {
+            background: #16a34a;
+        }
+        .bookmarklet-btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: move;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: transform 0.2s;
+        }
+        .bookmarklet-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+        .instructions {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .instructions ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin: 8px 0;
+        }
+        .button-container {
+            text-align: center;
+            margin: 30px 0;
+            padding: 30px;
+            background: #f0f4ff;
+            border-radius: 8px;
+            border: 2px dashed #667eea;
+        }
+        .note {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .keyword-count {
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Keyword Checker Bookmarklet</h1>
+        <p class="subtitle">Enter keywords below, then drag "check keywords" button to your bookmarks bar. To check on the keywords for a page, click that bookmark.</p>
+        
+        <div class="keywords-section">
+            <h3>Set Your Keywords:</h3>
+            <div class="keyword-count" id="keywordCount">keywords</div>
+            <div id="keywordsList"></div>
+            <button class="add-btn" onclick="addKeyword()">+ Add Another Keyword</button>
+        </div>
+
+        <div class="button-container">
+            <p style="margin-bottom: 15px; font-weight: bold;">Drag this button to your bookmarks bar:</p>
+            <a href="javascript:(function(){alert('Please add keywords first');})();" id="bookmarklet" class="bookmarklet-btn">
+                Keyword Check
+            </a>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 How to Use:</h3>
+            <ol>
+                <li><strong>Edit keywords</strong> in the boxes above (if needed).</li>
+                <li><strong>Drag the "Check Keywords" button</strong> to your bookmarks bar</li>
+                <li><strong>Visit any webpage</strong> you want to check</li>
+                <li><strong>Click the bookmark</strong> - it will show you which keywords were found</li>
+                <li><strong></strong>Copy results</strong> hit copy json button and enter into spreadsheet</li>
+            </ol>
+        </div>
+
+        <div class="note">
+            <strong>Notes:</strong>
+            <ul>
+                <li>The search is case-insensitive</li>
+                <li>JSON format includes URL, timestamp, and found/not found lists</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let keywords = ['Beziehungsdrama','Beziehungsdramen','Blutige Verbrechen','Bluttat','Ehefrau','Ehefrauen','Ehemann','Ehemänner','Ehepartner','Ehepartnerin','Ehetragödie','Ehetragödien','Ehrenmord','Ermordet','Femicide','Feminizid','Femizid','Frauenmord','Frauenmorde','Getötet','Gewalt','blutige Bluttat','Mädchen','Mord','Ehrenmorde','ermordete','ermordeten','Morde','Feminizide','Opfer','Femizide','tötete','Tötung','Tötungen','Partner','Partnerin','Gewalttat','gewalttätig','Ehe','Tod','Todesfälle','Tot','Totschlag','Tötungsdelikt','Mordfall','Mordserie','Tötungsdelikte','Todesfall','verdächtig','Tote','Verdächtige','Verheiratet','Weiblich','Weiblichem','Ehepartnerinnen','Partnerinnen','blutige','weibliche','weiblicher','verdächtigen','Tat','Tated'];
+
+        function renderKeywords() {
+            const container = document.getElementById('keywordsList');
+            const countEl = document.getElementById('keywordCount');
+            
+            countEl.textContent = `${keywords.length} keyword${keywords.length !== 1 ? 's' : ''}`;
+            
+            container.innerHTML = keywords.map((kw, idx) => `
+                <div class="keyword-row">
+                    <input 
+                        type="text" 
+                        class="keyword-input" 
+                        value="${kw}" 
+                        placeholder="Keyword ${idx + 1}"
+                        oninput="updateKeyword(${idx}, this.value)"
+                    >
+                </div>
+            `).join('');
+            
+            updateBookmarklet();
+        }
+
+        function addKeyword() {
+            keywords.push('');
+            renderKeywords();
+        }
+
+        function removeKeyword(idx) {
+            if (keywords.length > 1) {
+                keywords.splice(idx, 1);
+                renderKeywords();
+            }
+        }
+
+        function updateKeyword(idx, value) {
+            keywords[idx] = value;
+            updateBookmarklet();
+        }
+
+        function updateBookmarklet() {
+            const bookmarkletLink = document.getElementById('bookmarklet');
+            const keywordsArray = keywords.filter(k => k.trim() !== '').map(k => k.replace(/'/g, "\\'"));
+            
+            if (keywordsArray.length === 0) {
+                bookmarkletLink.href = "javascript:(function(){alert('No keywords set!');})();";
+                return;
+            }
+
+            const code = `
+(function() {
+    const keywords = [${keywordsArray.map(k => `'${k}'`).join(', ')}];
+    const text = document.body.innerText.toLowerCase();
+    const headline = document.querySelector('h1') ? document.querySelector('h1').innerText : 
+                 document.title;
+    const found = [];
+    const notFound = [];
+    
+    keywords.forEach(kw => {
+        if (text.includes(kw.toLowerCase())) {
+            found.push(kw);
+        } else {
+            notFound.push(kw);
+        }
+    });
+    
+    const results = {
+        url: window.location.href,
+        headline: headline,
+        timestamp: new Date().toISOString(),
+        total: keywords.length,
+        found: found,
+        notFound: notFound
+    };
+    
+    const jsonOutput = JSON.stringify(results, null, 2); // Pretty version for display
+    const spreadsheetFormat = JSON.stringify(results); // Single-line version for copying
+    
+    const modal = document.createElement('div');
+    modal.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;padding:20px;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,0.3);z-index:999999;max-width:600px;max-height:80vh;overflow:auto;font-family:monospace;';
+    
+    const textDisplay = 'Found: ' + found.length + '/' + keywords.length + '\\nNot Found: ' + notFound.length + '\\n\\n' + jsonOutput;
+    
+    modal.innerHTML = '<h3 style="margin:0 0 15px 0;font-family:sans-serif;">Keyword Check Results</h3><pre style="background:#f5f5f5;padding:10px;border-radius:4px;overflow:auto;max-height:50vh;white-space:pre-wrap;word-wrap:break-word;">' + textDisplay + '</pre><div style="margin-top:15px;display:flex;gap:10px;"><button id="copyBtn" style="flex:1;padding:10px;background:#4CAF50;color:white;border:none;border-radius:4px;cursor:pointer;font-size:14px;">Copy JSON</button><button id="closeBtn" style="flex:1;padding:10px;background:#666;color:white;border:none;border-radius:4px;cursor:pointer;font-size:14px;">Close</button></div>';
+    
+    document.body.appendChild(modal);
+    
+    document.getElementById('copyBtn').onclick = function() {
+        navigator.clipboard.writeText(spreadsheetFormat).then(() => {
+            this.textContent = 'Copied!';
+            this.style.background = '#2196F3';
+            setTimeout(() => {
+                this.textContent = 'Copy JSON';
+                this.style.background = '#4CAF50';
+            }, 2000);
+        });
+    };
+    
+    document.getElementById('closeBtn').onclick = function() {
+        modal.remove();
+    };
+})();
+            `.trim();
+
+            bookmarkletLink.href = 'javascript:' + encodeURIComponent(code);
+        }
+
+        renderKeywords();
+    </script>
+</body>
+</html>
