@@ -15,7 +15,7 @@ if __name__ == "__main__":
     output_path= '../data/processed/'
 
     #import csv
-    df_manual_check = pd.read_csv(f'{source_path}manual-tag_all-checked_2026-01-17.csv') 
+    df_manual_check = pd.read_csv(f'{source_path}manual_tagging-all_checked_articles.csv') 
 
     #parse json
     parsed_data = [] #empty list
@@ -25,14 +25,14 @@ if __name__ == "__main__":
         json_raw = row['json']
 
         #rows with no json
-        if pd.isna(json_raw): 
+        if pd.isna(json_raw):
             continue
 
         try:
             data = json.loads(row['json'])
 
             parsed_data.append({
-                'id': row['article_id'],
+                'id': row['id'],
                 'url': data['url'],
                 'headline': data['headline'],
                 'timestamp': data['timestamp'],
@@ -52,11 +52,13 @@ json_df.to_csv(f'{output_path}json_parsed.csv', index=False)
 
 print(df_manual_check.head())
 
+#update id column
+df_manual_check = df_manual_check.rename(columns={'article_id': 'id'})
+
 # Merge the data
 df_merged = df_manual_check.merge(
     json_df,
-    right_on='id',
-    left_on='article_id',
+    on='id',
     how='left',  # Keep all rows from original
     indicator=True  # Add column showing merge status
 )
