@@ -17,6 +17,8 @@ if __name__ == "__main__":
     #import csv
     df_manual_check = pd.read_csv(f'{source_path}manual_tagging-all_checked_articles.csv') 
 
+    print(f'df manual check shape NA before {df_manual_check[df_manual_check['id'].isna()].shape}')
+
     #parse json
     parsed_data = [] #empty list
 
@@ -46,39 +48,34 @@ if __name__ == "__main__":
             print(f"Error parsing row {idx}")
 
 
-json_df = pd.DataFrame(parsed_data)
-print(json_df.head())
-json_df.to_csv(f'{output_path}json_parsed.csv', index=False)
+    json_df = pd.DataFrame(parsed_data)
+    print(f'df json_df shape {json_df.shape}')
+    json_df.to_csv(f'{output_path}json_parsed.csv', index=False)
 
-print(df_manual_check.head())
+    print(f'df manual check shape {df_manual_check.shape}')
 
-#update id column
-df_manual_check = df_manual_check.rename(columns={'article_id': 'id'})
+    # Merge the data
+    df_merged = df_manual_check.merge(
+        json_df,
+        on='id',
+        how='left',  # Keep all rows from original
+        indicator=True  # Add column showing merge status
+    )
 
-# Merge the data
-df_merged = df_manual_check.merge(
-    json_df,
-    on='id',
-    how='left',  # Keep all rows from original
-    indicator=True  # Add column showing merge status
-)
+    print(f'df merged {df_merged.shape}')
+    # Check merge results
+    merge_stats = df_merged['_merge'].value_counts()
+    print("Merge Statistics:")
+    print(f"  - Both (matched): {merge_stats.get('both', 0)}")
+    print(f"  - Left only (no JSON data): {merge_stats.get('left_only', 0)}")
+    print(f"  - Right only: {merge_stats.get('right_only', 0)}")
+    print()
 
-# Check merge results
-merge_stats = df_merged['_merge'].value_counts()
-print("Merge Statistics:")
-print(f"  - Both (matched): {merge_stats.get('both', 0)}")
-print(f"  - Left only (no JSON data): {merge_stats.get('left_only', 0)}")
-print(f"  - Right only: {merge_stats.get('right_only', 0)}")
-print()
+    # Remove the indicator column if you don't want it
+    df_merged = df_merged.drop('_merge', axis=1)
 
-# Flag rows with missing JSON data
-df_merged['has_keyword_data'] = df_merged['_merge'] == 'both'
-
-# Remove the indicator column if you don't want it
-df_merged = df_merged.drop('_merge', axis=1)
-
-# Save results
-df_merged.to_csv(f'{output_path}manual-tag_all_parsedson.csv', index=False)
+    # Save results
+    df_merged.to_csv(f'{output_path}manual-tag_all_parsedson.csv', index=False)
 
 
 
