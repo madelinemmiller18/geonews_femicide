@@ -1,5 +1,8 @@
 # geonews_femicide
-Data Literacy project in winter semester 2025-2026: evaluating geolocated german news dataset for femicide research
+Data Literacy project in winter semester 2025-2026: 
+Using geolocated German news corpus introduced by Kriesch and
+Losacker in 2025, we selected a high performing query and bootstrap confidence intervals to return a final dataset on femicide cases in Germany.
+We then apply geospatial and temporal analyses to validate the data and demonstrate a use case.
 
 ## source data
 Source dataset is available at: https://doi.org/10.22029/jlupub-19573
