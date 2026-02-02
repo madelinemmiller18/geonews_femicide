@@ -2,14 +2,14 @@
 ## Data Literacy project in winter semester 2025-2026 
 We use the geolocated German news corpus introduced by Kriesch and Losacker (2025) to identify femicide-related reporting in Germany. A high-performing natural-language query was selected and evaluated using bootstrap confidence intervals, resulting in a curated dataset of 31,368 articles reporting on femicide cases between 2017 and 2023. Geospatial and temporal analyses were subsequently applied to assess data validity and illustrate a practical application.
 
-## source data
+## Source Data
 Source dataset is available at: https://doi.org/10.22029/jlupub-19573
 
-## data processing workflow
+## Data Processing Workflow
 1. Downloading the files from source dataset at https://doi.org/10.22029/jlupub-19573:
-   a. NewsIndex_f32.7z
+   a. CommonCrawlNews.db (SQL database)
+   b. NewsIndex_f32.7z (Usearch)
    *Our project used the highest embedding precision available. However, reduced embeddings are available for the source data, and can be used (with tradeoffs in precision).
-   b. CommonCrawlNews.db
 3. Run the scripts in the repository_data_pull folder to generate the raw query data.
 4. Use topkresults.py to pull topk from different queries
 5. Perform manual annotation and select high performing query
@@ -20,7 +20,7 @@ Source dataset is available at: https://doi.org/10.22029/jlupub-19573
 
 
 
-## repository structure
+## Repository Structure
 ```
 ├── data/                  
 │   ├── femicide_queries.csv                      # list of queries tested
