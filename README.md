@@ -20,7 +20,7 @@ Our project used the highest embedding precision available. However, reduced emb
 ├── experiments/                # Jupyter notebooks for data analyses
 │   ├── exploratory/            # Early experiment documentation
 │   ├── reports/                # Final notebooks for report visualizations
-│   └── geodata_analysis/       # Code for geodata analysis on final dataset
+│   └── geodata_analysis/       # Code and data for geodata analysis on final dataset
 │
 ├── src/
 │ ├── create_csv_thresholds.py                # script to apply thresholds to raw query dataset
