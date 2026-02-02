@@ -16,6 +16,7 @@ Our project used the highest embedding precision available. However, reduced emb
 │   ├── manual_tagging-all_checked_articles.csv   # manually annotated data 
 │   ├── manual-tag_all_parsedson.csv              # manually annotated data with parsed json columns
 │   └── final_dataset_t225.csv                    # final dataset from selected query with applied filters
+│
 ├── experiments/                # Jupyter notebooks for data analyses
 │   ├── exploratory/            # Early experiment documentation
 │   ├── reports/                # Final notebooks for report visualizations
