@@ -1,6 +1,6 @@
 # Developing a Dataset of Geolocated German News Reporting on Femicide
 ## Data Literacy project in winter semester 2025-2026 
-We use the geolocated German news corpus introduced by Kriesch and Losacker (2025) to identify femicide-related reporting in Germany. A high-performing natural-language query was selected and evaluated using bootstrap confidence intervals, resulting in a curated dataset of 31,368 femicide cases. Geospatial and temporal analyses were subsequently applied to assess data validity and illustrate a practical application.
+We use the geolocated German news corpus introduced by Kriesch and Losacker (2025) to identify femicide-related reporting in Germany. A high-performing natural-language query was selected and evaluated using bootstrap confidence intervals, resulting in a curated dataset of 31,368 articles reporting on femicide cases between 2017 and 2023. Geospatial and temporal analyses were subsequently applied to assess data validity and illustrate a practical application.
 
 ## source data
 Source dataset is available at: https://doi.org/10.22029/jlupub-19573
