@@ -1,0 +1,18 @@
+id,query,naming,language,queryname,status,top 50,length
+7,Police report about a fatal domestic dispute or marital tragedy with a female victim,police-report-gender-motivated,EN,7_police-report-gender-motivated_EN,available,TRUE,84
+8,Polizeibericht über ein tödliches Beziehungsdrama oder eine Ehetragödie mit einem weiblichen Opfer,police-report-gender-motivated,DE,8_police-report-gender-motivated_DE,available,TRUE,98
+9,Woman OR girl killed OR murder OR murdered,woman-girl-killed,EN,9_woman-girl-killed_EN,available,TRUE,42
+10,Frau OR Mädchen Tod OR tot OR Mord OR ermordet,woman-girl-killed,DE,10_woman-girl-killed_DE,available,,46
+11,A murder where victim is a woman or girl,murder-woman-victim,EN,11_murder-woman-victim_EN,available,,40
+12,"Ein Mord, bei dem das Opfer eine Frau oder ein Mädchen ist",murder-woman-victim,DE,12_murder-woman-victim_DE,available,,58
+13,"crimes, victim is a woman, including homicide, assault, domestic violence, intimate partner violence, sexual violence, stalking, or other violent offenses. Focus on police reports, investigations, or court coverage",victim-woman-long,EN,13_victim-woman-long_EN,available,,214
+14,"Straftat, das Opfer ist eine Frau, einschließlich Tötungsdelikten, Körperverletzung, häuslicher Gewalt, Partnerschaftsgewalt, sexueller Gewalt, Stalking und anderen Gewaltdelikten. Fokus auf Polizeiberichte, Ermittlungen und Gerichtsberichterstattung",victim-woman-long,DE,14_victim-woman-long_DE,available,,250
+22,Femizid,femicide_Femizid,DE,22_femicide_Femizid_DE,available,TRUE,7
+23,Frauenmord,femicide_Frauenmord,DE,23_femicide_Frauenmord_DE,available,,10
+24,Feminizid,femicide_Feminizid,DE,24_femicide_Feminizid_DE,available,TRUE,9
+26,Femicide,femicide_Femicide,EN,26_femicide_Femicide_EN,available,TRUE,8
+27,femicide,femicide_femicide,EN,27_femicide_femicide_EN,available,TRUE,8
+29,Eine Frau wurde ermordet,woman-was-murdered,DE,29_woman-was-murdered_DE,available,,24
+30,Eine Frau wurde getötet,woman-was-killed,DE,30_woman-was-killed_DE,available,,23
+31,Mord an einer Frau oder einem Mädchen,murder-woman-girl,DE,31_murder-woman-girl_DE,available,TRUE,37
+32,Tötungsdelikt mit weiblichem Opfer,homicide-female,DE,32_homicide-female_DE,available,TRUE,34
