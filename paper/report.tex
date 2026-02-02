@@ -1,0 +1,373 @@
+%%%%%%%% DATA LITERACY 2025 LATEX PROJECT TEMPLATE FILE %%%%%%%%%%%%%%%%%
+%%% Based on the 2025 ICML template, available at https://icml.cc/Conferences/2025/AuthorInstructions %%%
+
+\documentclass{article}
+
+% Recommended, but optional, packages for figures and better typesetting:
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{booktabs} % for professional tables
+
+\usepackage{comment}
+
+\usepackage{xcolor} %ADDED FOR NOTES
+\usepackage{amsmath} %ADDED FOR MATH FORMATTING
+\usepackage{enumitem}
+
+\usepackage{dblfloatfix} % allow figure* at bottom in two-column
+\usepackage{cuted}
+\usepackage{capt-of} % for \captionof
+
+\usepackage{cuted}
+\usepackage{caption}
+
+% reduce vertical space before/after strip
+\setlength{\stripsep}{0pt}
+
+\usepackage{tikz}
+% Corporate Design of the University of Tübingen
+% Primary Colors
+\definecolor{TUred}{RGB}{165,30,55}
+\definecolor{TUgold}{RGB}{180,160,105}
+\definecolor{TUdark}{RGB}{50,65,75}
+\definecolor{TUgray}{RGB}{175,179,183}
+
+% Secondary Colors
+\definecolor{TUdarkblue}{RGB}{65,90,140}
+\definecolor{TUblue}{RGB}{0,105,170}
+\definecolor{TUlightblue}{RGB}{80,170,200}
+\definecolor{TUlightgreen}{RGB}{130,185,160}
+\definecolor{TUgreen}{RGB}{125,165,75}
+\definecolor{TUdarkgreen}{RGB}{50,110,30}
+\definecolor{TUocre}{RGB}{200,80,60}
+\definecolor{TUviolet}{RGB}{175,110,150}
+\definecolor{TUmauve}{RGB}{180,160,150}
+\definecolor{TUbeige}{RGB}{215,180,105}
+\definecolor{TUorange}{RGB}{210,150,0}
+\definecolor{TUbrown}{RGB}{145,105,70}
+
+% hyperref makes hyperlinks in the resulting PDF.
+% If your build breaks (sometimes temporarily if a hyperlink spans a page)
+% please comment out the following usepackage line and replace
+% \usepackage{icml2023} with \usepackage[nohyperref]{icml2023} above.
+\usepackage{hyperref}
+
+% Attempt to make hyperref and algorithmic work together better:
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+\usepackage[accepted]{icml2025}
+
+% For theorems and such
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+
+% if you use cleveref..
+\usepackage[capitalize,noabbrev]{cleveref}
+
+% Todonotes is useful during development; simply uncomment the next line
+%    and comment out the line below the next line to turn off comments
+%\usepackage[disable,textsize=tiny]{todonotes}
+\usepackage[textsize=tiny]{todonotes}
+
+
+% The \icmltitle you define below is probably too long as a header.
+% Therefore, a short form for the running title is supplied here:
+\icmltitlerunning{Project Report Template for Data Literacy 2025}
+
+\begin{document}
+
+\twocolumn[
+\icmltitle{Geolocated German News Reporting on Femicide}
+
+% It is OKAY to include author information, even for blind
+% submissions: the style file will automatically remove it for you
+% unless you've provided the [accepted] option to the icml2023
+% package.
+
+% List of affiliations: The first argument should be a (short)
+% identifier you will use later to specify author affiliations
+% Academic affiliations should list Department, University, City, Region, Country
+% Industry affiliations should list Company, City, Region, Country
+
+% You can specify symbols, otherwise they are numbered in order.
+% Ideally, you should not use this facility. Affiliations will be numbered
+% in order of appearance and this is the preferred way.
+\icmlsetsymbol{equal}{*}
+
+\begin{icmlauthorlist}
+\icmlauthor{Madeline Miller}{equal}
+\icmlauthor{Karoline Wolandt}{equal}
+\icmlauthor{Zoe Kirsman}{equal}
+\icmlauthor{Rachel Amruthaluri}{equal}
+\end{icmlauthorlist}
+
+% put your email addresses here. You can use initials to save space, 
+% e.g. if you are called Max Mustermann, you can use \icmlcorrespondingauthor{MM}{max.mustermann@uni-tuebingen.de}
+% DO USE YOUR UNIVERSITY EMAIL ADDRESS!
+\icmlcorrespondingauthor{MM}{madeline-marie.miller@uni-tuebingen.de} 
+
+% You may provide any keywords that you
+% find helpful for describing your paper; these are used to populate
+% the "keywords" metadata in the PDF but will not be shown in the document
+\icmlkeywords{geolocated, news, articles, Germany, femicide}
+
+\vskip 0.3in
+]
+
+% this must go after the closing bracket ] following \twocolumn[ ...
+
+% This command actually creates the footnote in the first column
+% listing the affiliations and the copyright notice.
+% The command takes one argument, which is text to display at the start of the footnote.
+% The \icmlEqualContribution command is standard text for equal contribution.
+% Remove it (just {}) if you do not need this facility.
+
+%\printAffiliationsAndNotice{}  % leave blank if no need to mention equal contribution
+\printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
+\begin{abstract}
+From a corpus of circa 50 million German news articles, this study curates a dataset of 31,368 articles on femicide. The curation process involves semantic search, query selection, and cosine-distance threshold selection based on stratified sampling, precision estimation, and bootstrap confidence intervals. 
+%The curation process involves semantic search and manual validation of stratified samples for query and cosine-distance threshold selection. 
+These methods are reproducible for similar research and downstream analysis. Using the final dataset, we present a spatial and temporal analysis of femicide-related media coverage to identify cases of over- or underreporting.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+News coverage shapes public understanding and public discourse on societal issues.
+Analysing large news corpora makes it possible to study how specific topics are
+covered and represented in the media.
+One such resource is the geolocated German news corpus introduced by
+Kriesch and Losacker~(\citeyear{kreischlosacker2025geolocated}, Section~\ref{sec:datasource}), which enables large-scale, query-based retrieval
+of news articles.
+
+This paper focuses on curating a sub-dataset of german news articles reporting on femicide. Here, femicide is defined as the killing or murder of a woman or girl ~\citep{eige2023femicide}. 
+Given that femicide remains an under-studied form of gender-based
+violence~\citep{ReisMeyer2024Femicide}, constructing a reliable and transparent
+dataset is an important prerequisite for subsequent empirical analyses ~\cite{dignazio_feminicide_2022}.
+%Addressing such an under-studied issue of gender‑based violence ~\citep{ReisMeyer2024Femicide} is an opportunity to highlight its relevance. 
+
+In the curation process of our dataset, we manually label 1,000 articles [\ref{sec:annotation}], select a high-performing semantic search query [\ref{sec:queryselection}], and determine a cosine distance threshold to
+ensure a sufficiently high dataset precision [\ref{sec:threshold}]. The resulting dataset is then used to illustrate geographical and temporal patterns in German media coverage of femicide [\ref{sec:results}]. Further implications are also discussed [\ref{sec:conclusion}]. %does implcaitions mean what others can do that we didn't, otherwise mention that too. and can make this last parpgah a bit longer since we have the space ++ can this be more specific? Further implications of what?
+\section{Data and Methods}\label{sec:methods}
+
+\subsection{Data Source: German News Corpus}
+\label{sec:datasource}
+To build our dataset of news articles on femicide, we use a geolocated German news dataset developed by Kriesch and Losacker (\citeyear{kreischlosacker2025geolocated}). The corpus contains about 50 million German news articles extracted from CommonCrawl, with crawl dates between August 2016 and December 2023. The dataset consists of a SQLite database containing article information (including unique identifiers, URLs, publication and crawl dates, and geolocated data) and a Usearch vector database that stores a semantic embedding for each article.
+ 
+To retrieve articles relevant to our topic, a natural-language query is encoded into a vector representation and compared to the stored article embeddings (32-bit floating-point precision), using cosine distance as a similarity measure. The search returns the top-$k$ articles whose embeddings are most similar to the query vector, where smaller cosine-distance values indicate higher semantic similarity. The identifiers of the retrieved articles are then used to retrieve metadata and geographic information from the SQLite database.
+
+\subsection{Curation Pipeline}
+\label{sec:pipeline}
+Using the semantic retrieval and structured querying described above, we construct an initial dataset of 500{,}000 articles. We then reduce to approximately 365{,}000 articles in two filtering steps:
+\begin{itemize}[label=--, leftmargin=1.4em, topsep=0pt, partopsep=0pt, itemsep=1pt, parsep=0pt]
+  \item Articles must contain at least one German NUTS location (fr.\ \emph{Nomenclature des unités territoriales statistiques}). Each article is associated with the locations mentioned in its content. As articles published by German outlets may report on femicide cases outside Germany, this filter restricts the dataset to articles that reference at least one location within Germany.
+  \item Articles must have a publication date between 2017 and 2023. Since the crawling of the news corpus started in August 2016 and ended in December 2023, coverage outside the full years 2017--2023 is incomplete. 
+\end{itemize}
+After the two filtering steps, we apply a cosine-distance threshold of $t = 0.225$ and retain only articles with $\mathrm{cos\_dist} \le t$. This results in a dataset of 31{,}368 articles. Below, we explain how the query and the threshold were chosen, with both steps relying on sampling and manual annotation.
+\subsection{Manual Annotation Protocol}
+\label{sec:annotation}
+During the process of query and threshold selection, we manually label subsets of articles as either “relevant", “irrelevant”, or "unknown". The category “relevant” comprises any report on a woman or girl killed, including cases in which the killing is suspected, or respective court hearings. Articles classified as “irrelevant” cover cases of attempted murder, sexual assault, rape, suicide, fictional cases of femicide, or unrelated topics. The category "unknown" includes articles whose relevance cannot be determined due to a lack of article access (e.g., due to paywalls, 404 errors, or redirects). In some cases, relevance can be determined from available information, such as preview text, URL text, or by locating the same article on an alternative website.
+
+\subsection{Query Selection}
+\label{sec:queryselection}
+We develop 17 German and English queries, ranging from a 7-character keyword to a 250-character sentence. For each query, we manually annotate the 25 retrieved articles with the smallest cosine distances. 
+The two queries with the highest number of relevant results, no irrelevant results, and low number of undetermined are reevaluated at their top 50.
+Our selected query ``Tötungsdelikt mit weiblichem Opfer'', has the highest number of relevant articles, with 45 relevant and 5 undetermined among the top 50 results.
+\begin{figure}[h]
+%\vspace{-3pt}
+\centering
+\small
+\includegraphics[width=0.97\columnwidth]{figures/visual.pdf}
+\vspace{-9pt}
+\caption{
+Comparison of the top 50 articles retrieved for five queries. Queries A and B1 each had 24 relevant articles in the top 25. German queries longer than 30 characters consistently have distributions at lower cosine distances than their English translations (B1,B2). This was observed for all 5 longer translated query pairs, but not for shorter single-keyword queries (C1, C2). Lower cosine distance distributions did not necessarily correspond to higher or lower ratios of relevant to irrelevant articles (B1, B2). *Full text of longer queries: A: \textit{Tötungsdelikt mit weiblichem Opfer}; B1: \textit{Police report about a fatal domestic dispute or marital tragedy with a female victim}; B2: \textit{Polizeibericht über ein tödliches Beziehungsdrama oder eine Ehetragödie mit einem weiblichen Opfer}.}
+\label{query_compare}
+\vspace{-3pt}
+\label{fig:cosine-dists}
+\end{figure}
+
+\subsection{Threshold Selection}
+\label{sec:threshold}
+After applying the selected query and the filtering steps described in \ref{sec:pipeline}, we obtain a dataset of 364{,}570 articles. While this set contains a large number of relevant articles, it also includes off-topic cases, resulting in a dataset that is too noisy.
+
+Our next step is to determine a cosine-distance threshold~$t$ such that all articles with $\mathrm{cos\_dist} \le t$ are retained and the rest discarded. The choice of $t$ controls the relevance rate (i.e., the precision) of the resulting dataset. Our objective is to choose $t$ such that the precision of the final dataset is sufficiently high.
+
+For any candidate threshold~$t$, let $\mathcal{D}(t)$ denote the set of articles with $\mathrm{cos\_dist} \le t$, and let $N(t)$ be the number of articles in $\mathcal{D}(t)$. Then the true precision at threshold~$t$ is
+\[
+p(t)
+  = \frac{\#\text{Relevant articles in }\mathcal{D}(t)}{N(t)}.
+\]
+
+Since we do not know whether an article reports on a femicide case for all articles in our dataset, we cannot compute $p(t)$ exactly and we therefore estimate it from a manually labeled sample.
+
+%\subsubsection*{Stratified Sampling by Cosine Distance}
+\textbf{Stratified Sampling.} To obtain a labeled sample, we stratify the articles into six cosine-distance bins $B_1,\dots,B_6$, and randomly sample from each bin. The first bin contains only 20 articles and is taken in full, while for all remaining bins we draw a fixed number of samples, as shown in Table~\ref{tab:sampling_bins}.
+\begin{table}[h]
+\centering
+\small
+\caption{Stratified sampling by cosine distance.}
+\label{tab:sampling_bins}
+\begin{tabular}{lrrrr}
+\toprule
+Bin & Population & Sampled & Usable \\
+\midrule
+$(0.16, 0.18]$ & $20$ & $20$ & $20$ \\
+$(0.18, 0.20]$ & $2{,}110$ & $150$ & $136$ \\
+$(0.20, 0.22]$ & $19{,}062$ & $150$ & $131$ \\
+$(0.22, 0.24]$ & $57{,}751$ & $150$ & $130$ \\
+$(0.24, 0.26]$ & $135{,}993$ & $150$ & $128$ \\
+$(0.26, 0.28]$ & $149{,}634$ & $150$ & $132$ \\
+\midrule
+Total & $364{,}570$ & $770$ & $677$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Using the protocol described in Section~\ref{sec:annotation}, we label each sampled article as relevant, irrelevant, or unknown. Articles labeled as unknown are excluded from the analysis, leaving 677 usable samples. Figure~\ref{fig:relevance_by_cosine_bin} shows the distribution of relevant and irrelevant samples across cosine-distance bins. These labeled samples are then used to estimate the precision $p(t)$ at various cosine-distance thresholds.
+
+\begin{figure}[h]
+\centering
+\caption{Relevant and irrelevant samples per cosine distance bin.}
+\includegraphics[width=\columnwidth]{figures/relevance_by_cosine_bin_tueplots.pdf}
+\label{fig:relevance_by_cosine_bin}
+\vspace{-20pt}
+\end{figure}
+
+\textbf{Estimating Precision.} For each bin $B_k$ with $n_k$ samples, the estimated relevance rate is
+\[
+\hat{r}_k \;=\; \frac{1}{n_k} \sum_{i=1}^{n_k} y_i
+\]
+where $y_i = 1$ if sample $i$ was marked as relevant and $y_i = 0$ if marked as irrelevant. Table~\ref{tab:bin_rates} reports the empirical precision per bin.
+
+\begin{table}[h]
+\vspace{-10pt}
+\centering
+\small
+\caption{Estimated relevance rate per bin.}
+\label{tab:bin_rates}
+\begin{tabular}{lrr}
+\toprule
+Bin & $\hat r_k$ \\
+\midrule
+$(0.16,0.18]$ & $1.000$ \\
+$(0.18,0.20]$ & $0.993$ \\
+$(0.20,0.22]$ & $0.924$ \\
+$(0.22,0.24]$ & $0.754$ \\
+$(0.24,0.26]$ & $0.320$ \\
+$(0.26,0.28]$ & $0.136$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+For a given cosine-distance threshold $t$, if $t$ coincides with the upper boundary of bin $B_\ell$, then $\mathcal{D}(t) = B_1 \cup B_2 \cup ~\dots \cup B_\ell$. If $N_k$ denotes the population size of a bin~$B_k$, then the estimated precision of $\mathcal{D}(t)$ is
+\[
+\hat p(t)
+= \frac{\hat r_1 N_1 + \hat r_2 N_2 + \dots + \hat r_\ell N_\ell}{N(t)},
+\]
+where $N(t)=N_1 + N_2 + \dots + N_\ell$.
+
+If instead $t$ lies inside a bin $B_\ell$, then only a portion of that bin is included in $\mathcal{D}(t)$. Let $B_\ell(t)\subseteq B_\ell$ denote the subset of articles in $B_\ell$ with $\mathrm{cos\_dist}\le t$, and let $N_\ell(t)=|B_\ell(t)|$. Then the relevance rate for this partial bin is estimated as
+\[
+\hat r_\ell(t)=\frac{1}{n_\ell(t)} \sum_{i=1}^{n_\ell(t)} y_i,
+\]
+where $n_\ell(t)$ is the number of samples that fall into $B_\ell(t)$, and the precision estimator in this case is
+\[
+\hat p(t) = \frac{\displaystyle\sum_{k=1}^{\ell-1} \hat r_k N_k
++ \hat r_\ell(t) N_\ell(t)}{\displaystyle\sum_{k=1}^{\ell-1} N_k + N_\ell(t)}.
+\]
+\textbf{Bootstrap Confidence Intervals.}
+In addition to computing $\hat p(t)$ for a set of candidate thresholds, we construct confidence intervals to quantify uncertainty in $\hat p(t)$ by using a stratified bootstrap. For each bootstrap replicate $b=1,\dots,5000$, we draw $n_k$ samples with replacement from each $B_k$, and we recompute $\hat p(t)$ for all thresholds $t$ under consideration. This yields, for each threshold $t$, a bootstrap distribution
+\[
+\{\hat p^{(1)}(t),\hat p^{(2)}(t),\dots,\hat p^{(5000)}(t)\},
+\]
+from which we construct a 95\% percentile confidence interval.
+
+\textbf{Threshold Choice.}
+We evaluate a grid of candidate thresholds $t\in\{0.200, 0.205, \dots, 0.250\}$ and report the corresponding point estimates $\hat p(t)$ and 95\% bootstrap confidence intervals in Table~\ref{tab:precision_ci}.
+%To determine a threshold $t$, we evaluate a grid of candidate thresholds $t\in\{0.200, 0.205, \dots, 0.250\}$ and compute both the point estimate $\hat p(t)$ and a 95\% bootstrap confidence interval. The results are shown in Table~\ref{tab:precision_ci}.
+
+\begin{table}[h]
+\vspace{-5pt}
+\centering
+\small
+\caption{Precision estimates with 95\% bootstrap CI.}
+\label{tab:precision_ci}
+\begin{tabular}{cccc}
+\toprule
+$t$ & $|\mathcal{D}(t)|$ & $\hat p(t)$ & 95\% CI \\
+\midrule
+0.200 & 2{,}130   & 0.993 & [0.978,\,1.000] \\
+0.205 & 4{,}370   & 0.996 & [0.989,\,1.000] \\
+0.210 & 7{,}815   & 0.978 & [0.930,\,1.000] \\
+0.215 & 13{,}351  & 0.967 & [0.925,\,0.999] \\
+0.220 & 21{,}192  & 0.931 & [0.889,\,0.966] \\
+0.225 & 31{,}368  & 0.911 & [0.853,\,0.959] \\
+0.230 & 44{,}232  & 0.899 & [0.846,\,0.944] \\
+0.235 & 59{,}803  & 0.839 & [0.781,\,0.892] \\
+0.240 & 78{,}943  & 0.801 & [0.745,\,0.854] \\
+0.245 & 102{,}474 & 0.763 & [0.705,\,0.820] \\
+0.250 & 132{,}083 & 0.677 & [0.615,\,0.737] \\
+\bottomrule
+\end{tabular}
+\end{table}
+Prior work suggests that precision values above $90\%$ are often desirable when the goal is to curate a dataset of accurate examples~\citep{ning2025optimizingdataextractionmaterials}. Among the evaluated thresholds, $t = 0.225$ meets this criterion while retaining a comparatively large number of articles. Applying this threshold yields our final dataset of $31{,}368$ articles.
+
+\section{Results}\label{sec:results}
+
+Our final dataset provides a starting point for investigating patterns of media attention. To illustrate potential use cases, we compare article counts with the number of femicides\footnote{Data on femicides were obtained from the official German police crime statistics for 2017–2023 \citep{bkaPolizeilicheKriminalstatistik}.}. Specifically, we examine patterns of over- or underreporting by predicting the number of articles published in a NUTS region from the number of femicides in that region 
+in the same year, the previous year, and two years prior to account for continued reporting. A centered year variable tests for average temporal trends in news publishing. We control for regional heterogeneity by including random intercepts for NUTS regions, and for population size by using it as a log-offset. Given the count nature and overdispersion of the data, we estimate a negative binomial mixed-effects model \citep{zeileis2008regressionmodelscount}. 
+
+Results show that femicides in the same year significantly predict media coverage ($\beta = .22$, $p < .001$), indicating that on average, each additional femicide in a region and year is associated with approximately $100\cdot(1-e^{0.22}) \approx 24 \%$ more articles, while holding other predictors constant. Lagged femicide counts and the centered year do not significantly predict articles (all $p~\geq~.266$), indicating that coverage is largely contemporaneous and shows no clear linear time trend. The random intercepts reveal substantial regional heterogeneity in baseline media coverage ($SD~=~1.07$ on the log scale), corresponding to nearly a threefold difference in expected article counts between comparable regions.
+
+For visualization, we focus on 2019 as an illustrative example (cf. Fig. \ref{fig:geomap_19_tot}). The highest number of articles ($n = 674$) was published in Göttingen, where six femicides occurred, exceeding model predictions by 1.72 standard deviations. The peak of articles in 2019 in Göttingen (cf. Fig. \ref{fig:time_plot}) coincides with a high-profile double femicide and a 32-hour manhunt in September 2019, likely contributing to increased media attention. Such analyses can help identify overreporting of particularly sensational cases~\citep{meltzer_isolated_2024}, and potential underreporting related to marginalized victims~\citep{dignazio_feminicide_2022}. Identifying such misalignments is a first step toward analyzing systematic patterns of femicide media coverage. However, due to the hierarchical model specification, the current analysis captures deviations from typical coverage within regions rather than differences in overall media attention between NUTS regions.
+
+\begin{strip}
+\centering
+\captionof{figure}{Femicides and media coverage by NUTS (2019). The region of Göttingen is highlighted in red.}
+\includegraphics[width=\textwidth]{figures/fig_news_rate_2019.pdf}
+\label{fig:geomap_19_tot}
+\end{strip}
+
+\begin{figure}[h]
+\centering
+\caption{Monthly number of articles in the final dataset.%; The peak in September 2019 coincides with a high-profile double homicide in Göttingen, in which two women were killed, and a 32-hour manhunt for the suspect followed. This may have contributed to increased media coverage during that month.
+}
+\includegraphics[width=\columnwidth]{figures/time_plot_with_goettingen.pdf}
+\label{fig:time_plot}
+\end{figure}
+\vspace{-22pt}
+
+\section{Discussion \& Conclusion}\label{sec:conclusion}
+Our work focuses on the quality of the data returned by a single query. Cosine distances vary between queries, but do not indicate "higher" relevance to the overall topic [Figure ~\ref{fig:cosine-dists}]. The threshold determined for this dataset would not apply to results from other queries. Additionally, the final dataset based on one query represents a sample of the data skewed towards the query we selected; other queries included relevant articles in their top results that were not a part of our final dataset. That said, our initial dataset is large and reliable enough to see geographic patterns as the starting point for further analysis.
+
+Next, similar cosine distances indicate similar articles, which helps in annotating multiple reports on the same case and also indicates duplicate articles. Some duplicate cosine distances were for the same article under different publishers, others appear to be duplicates but have minor differences in text. Retaining only one article per cosine distance and publisher does not impact the top 50 of our selected query, and would remove only 1173 articles from our final dataset. 
+
+Finally, the geolocated news articles can be linked to their original Common Crawl sources to retrieve full article text. While outside the scope of this case study, this could address the challenge of broken URLs and offer further opportunities for data validation and analysis.
+\newpage
+
+\section*{Contribution Statement}
+
+Rachel Amruthaluri ran background research on original dataset structure, curation methods, validation methods, and testing methods.
+
+Zoe Kirsman designed and implemented the threshold selection procedure, including stratified sampling, precision estimation and bootstrap confidence intervals, and created visualizations.
+
+Madeline Miller collected and prepared the query datasets, set up the manual annotation collection process, performed query selection and visualization, and set up the GitHub repository.
+
+Karoline Wolandt curated the additional crime dataset, conducted geospatial data analysis, planned and performed the regression analysis, and created visualizations.
+
+The text of the report was written jointly by all
+authors.
+All authors contributed equally to manual annotation parameters and collection.
+
+\section*{Code Availability}
+Python code produced for this project can be accessed on: 
+\url{https://github.com/madelinemmiller18/geonews_femicide}.
+
+\bibliography{bibliography}
+\bibliographystyle{icml2025}
+
+\end{document}
+
+% This document was modified from the files available at https://icml.cc/Conferences/2025/AuthorInstructions
+% the full copyright notice is available within the file icml2025.sty
