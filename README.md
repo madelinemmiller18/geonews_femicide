@@ -3,6 +3,9 @@ Data Literacy project in winter semester 2025-2026: evaluating geolocated german
 
 ## source data
 Source dataset is available at: https://doi.org/10.22029/jlupub-19573
+Datasets pulled from the source data were too large to include in this repository, but can be recreated by: 
+1. Downloading the files from source dataset: NewsIndex_f32.7z, CommonCrawlNews.db
+2. Running scripts in repository_data_pull folder of this repository
 
 ## repository structure
 ```
