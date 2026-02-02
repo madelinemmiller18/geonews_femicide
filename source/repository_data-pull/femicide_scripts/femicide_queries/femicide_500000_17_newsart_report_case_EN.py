@@ -1,3 +1,6 @@
+#Source code at https://github.com/LukasKriesch/CommonCrawlNewsDataSet.
+#Adapted by Madeline Miller for Geolocated Femicide Project
+
 import os
 import numpy as np
 import pandas as pd
