@@ -7,6 +7,8 @@ Datasets pulled from the source data were too large to include in this repositor
 1. Downloading the files from source dataset: NewsIndex_f32.7z, CommonCrawlNews.db
 2. Running scripts in repository_data_pull folder of this repository
 
+Our project used the highest embedding precision available. However, reduced embeddings are available for the source data, and can be used (with tradeoffs in precision).
+
 ## repository structure
 ```
 ├── experiments/                # Jupyter notebooks for data analyses
