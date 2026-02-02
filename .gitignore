@@ -2,7 +2,7 @@
 .venv/
 
 # Data files (too large / derived)
-data/
+data_large/
 *.csv
 
 # Python cache
