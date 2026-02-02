@@ -5,7 +5,7 @@ Data Literacy project in winter semester 2025-2026: evaluating geolocated german
 Source dataset is available at: https://doi.org/10.22029/jlupub-19573
 
 ## repository structure
-
+```
 ├── experiments/                # Jupyter notebooks for data analyses
 │   ├── exploratory/            # Early experiment documentation
 │   ├── reports/                # Final notebooks for report visualizations
@@ -23,5 +23,6 @@ Source dataset is available at: https://doi.org/10.22029/jlupub-19573
 ├── .gitignore                  # Files/folders to ignore in Git updates
 ├── README.md                   # Project README
 └── LICENSE.txt                 # License
+```
 
 
