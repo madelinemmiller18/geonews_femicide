@@ -3,7 +3,6 @@
 
 # Data files (too large / derived)
 data_large/
-*.csv
 
 # Python cache
 __pycache__/
