@@ -4,16 +4,18 @@ Data Literacy project in winter semester 2025-2026: evaluating geolocated german
 ## source data
 Source dataset is available at: https://doi.org/10.22029/jlupub-19573
 
-## process
+## data processing workflow
 1. Downloading the files from source dataset at https://doi.org/10.22029/jlupub-19573:
-   a. NewsIndex_f32.7z (Our project used the highest embedding precision available. However, reduced embeddings are available for the source data, and can be used (with tradeoffs in precision).)
+   a. NewsIndex_f32.7z
+   *Our project used the highest embedding precision available. However, reduced embeddings are available for the source data, and can be used (with tradeoffs in precision).
    b. CommonCrawlNews.db
-3. Running scripts in repository_data_pull folder of this repository to get raw query data
-4. Use topkresults.py to pull topk from different queries, perform manual annotation, and select high performing query
-5. Run samples_manual_tagging_script.ipynb to pull samples from selected query for manual annotation
-6. Run threshold.ipynb to evaluate cosine distance thresholds
-7. Run create_csv_thresholds.py to apply selected thresholds
-8. Use files in geodata_analysis to run geodata analysis
+3. Run the scripts in the repository_data_pull folder to generate the raw query data.
+4. Use topkresults.py to pull topk from different queries
+5. Perform manual annotation and select high performing query
+6. Run samples_manual_tagging_script.ipynb to pull samples from selected query for sampled manual annotation
+7. Run threshold.ipynb to evaluate cosine distance thresholds
+8. Run create_csv_thresholds.py to apply selected thresholds
+9. Use files in geodata_analysis to run geospatial analysis
 
 
 
