@@ -13,7 +13,7 @@ Source dataset is available at: https://doi.org/10.22029/jlupub-19573
 │
 ├── src/
 │ ├── create_csv_thresholds.py                # script to apply thresholds to raw query dataset
-│ ├── keycheck-copyjson.html                  # bookmarklet to scrape JSON information from webpages (not used in report)
+│ ├── keycheck-copyjson.html                  # bookmarklet to scrape webpage data (not used in report)
 │ ├── keyword_process.py                      # script to process keywords (not used in report)
 │ ├── samples_manual_tagging_script.ipynb     # script to pull cosine distance samples for manual annotation    
 │ ├── summary_articles_nuts_month-year.py     # script to get summary of source dataset
