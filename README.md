@@ -17,10 +17,10 @@ Our project used the highest embedding precision available. However, reduced emb
 │   ├── manual-tag_all_parsedson.csv              # manually annotated data with parsed json columns
 │   └── final_dataset_t225.csv                    # final dataset from selected query with applied filters
 │
-├── experiments/                # Jupyter notebooks for data analyses
-│   ├── exploratory/            # Early experiment documentation
-│   ├── reports/                # Final notebooks for report visualizations
-│   └── geodata_analysis/       # Code and data for geodata analysis on final dataset
+├── experiments/                # jupyter notebooks for data analyses
+│   ├── exploratory/            # early experiment documentation
+│   ├── reports/                # final notebooks for report visualizations
+│   └── geodata_analysis/       # code and data for geodata analysis on final dataset
 │
 ├── src/
 │ ├── create_csv_thresholds.py                # script to apply thresholds to raw query dataset
@@ -29,17 +29,17 @@ Our project used the highest embedding precision available. However, reduced emb
 │ ├── samples_manual_tagging_script.ipynb     # script to pull cosine distance samples for manual annotation    
 │ ├── summary_articles_nuts_month-year.py     # script to get summary of source dataset
 │ ├── topkresults.py                          # script to pull topk results from a set of different queries
-│   └── repository_data_pull/   # Scripts for pulling data from source database (TCML cluster)
-│       ├── femicide_scripts/   # Scripts to test different queries related to femicide
-│       └── matches_scripts/    # Scripts to test different match types 
+│   └── repository_data_pull/   # scripts for pulling data from source database (TCML cluster)
+│       ├── femicide_scripts/   # scripts to test different queries related to femicide
+│       └── matches_scripts/    # scripts to test different match types 
 │
-├── paper/                      # Paper text and resources
+├── paper/                      # paper text and resources
 │   ├── paper.tex               # LaTeX copy of report
-│   └── figures/                # Figures for the paper
+│   └── figures/                # figures for the paper
 │
-├── .gitignore                  # Files/folders to ignore in Git updates
-├── README.md                   # Project README
-└── LICENSE.txt                 # License
+├── .gitignore                  # files/folders to ignore in Git updates
+├── README.md                   # project README
+└── LICENSE.txt                 # license
 ```
 
 
