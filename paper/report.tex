@@ -128,10 +128,11 @@
 %\printAffiliationsAndNotice{}  % leave blank if no need to mention equal contribution
 \printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
 \begin{abstract}
-From a corpus of circa 50 million German news articles, this study curates a dataset of 31,368 articles on femicide. The curation process involves semantic search, query selection, and cosine-distance threshold selection based on stratified sampling, precision estimation, and bootstrap confidence intervals. 
-%The curation process involves semantic search and manual validation of stratified samples for query and cosine-distance threshold selection. 
-These methods are reproducible for similar research and downstream analysis. Using the final dataset, we present a spatial and temporal analysis of femicide-related media coverage to identify cases of over- or underreporting.
+From a corpus of circa 50 million German news articles, this study curates a dataset of 31,368 articles on femicide. The curation process involves semantic search, query selection, and cosine-distance threshold selection based on stratified sampling, precision estimation, and bootstrap confidence intervals. These methods are reproducible for similar research and downstream analysis. Using the final dataset, we present a spatial and temporal analysis of femicide-related media coverage to identify cases of over- or under-reporting.
 \end{abstract}
+
+%The curation process involves semantic search and manual validation of stratified samples for query and cosine-distance threshold selection. \end{abstract}
+%We showcase how the final data can be used to identify patterns of over- or under-reporting on femicides, using negative binomial regression.
 
 \section{Introduction}\label{sec:intro}
 News coverage shapes public understanding and public discourse on societal issues.
@@ -147,24 +148,30 @@ violence~\citep{ReisMeyer2024Femicide}, constructing a reliable and transparent
 dataset is an important prerequisite for subsequent empirical analyses ~\cite{dignazio_feminicide_2022}.
 %Addressing such an under-studied issue of gender‑based violence ~\citep{ReisMeyer2024Femicide} is an opportunity to highlight its relevance. 
 
-In the curation process of our dataset, we manually label 1,000 articles [\ref{sec:annotation}], select a high-performing semantic search query [\ref{sec:queryselection}], and determine a cosine distance threshold to
-ensure a sufficiently high dataset precision [\ref{sec:threshold}]. The resulting dataset is then used to illustrate geographical and temporal patterns in German media coverage of femicide [\ref{sec:results}]. Further implications are also discussed [\ref{sec:conclusion}]. %does implcaitions mean what others can do that we didn't, otherwise mention that too. and can make this last parpgah a bit longer since we have the space ++ can this be more specific? Further implications of what?
+In the curation process of our dataset, we manually label over 1,000 articles [\ref{sec:annotation}], select a high-performing semantic search query [\ref{sec:queryselection}], and determine a cosine distance threshold to
+ensure a sufficiently high dataset precision [\ref{sec:threshold}]. Using negative binomial regression and crime statistics, we then showcase how our final dataset can be used to identify over- or under-reported cases of femicide in Germany. 
+
+%we illustrate how the resulting dataset can be used in femicide research. Using data on femicides in Germany and negative binomial regression, we showcase how the femicide news data can be used to identify cases of over- or under-reporting of femicides. Finally, implications discussed outline further avenues to build on this work or explore for future research. 
+
+%Further implications are also discussed [\ref{sec:conclusion}].
+%Finally, implications discussed outline further avenues to build on this work or explore for future research.
+%does implcaitions mean what others can do that we didn't, otherwise mention that too. and can make this last parpgah a bit longer since we have the space ++ can this be more specific? Further implications of what?
 \section{Data and Methods}\label{sec:methods}
 
 \subsection{Data Source: German News Corpus}
 \label{sec:datasource}
-To build our dataset of news articles on femicide, we use a geolocated German news dataset developed by Kriesch and Losacker (\citeyear{kreischlosacker2025geolocated}). The corpus contains about 50 million German news articles extracted from CommonCrawl, with crawl dates between August 2016 and December 2023. The dataset consists of a SQLite database containing article information (including unique identifiers, URLs, publication and crawl dates, and geolocated data) and a Usearch vector database that stores a semantic embedding for each article.
+To build our dataset of news articles on femicide, we use a geolocated German news dataset developed by Kriesch and Losacker (\citeyear{kreischlosacker2025geolocated}). The corpus contains about 50 million German news articles extracted from Common Crawl, with crawl dates between August 2016 and December 2023. The dataset consists of a SQLite database containing article information (including unique identifiers, URLs, publication and crawl dates, and geolocated data) and a Usearch vector database that stores a semantic embedding for each article.
  
-To retrieve articles relevant to our topic, a natural-language query is encoded into a vector representation and compared to the stored article embeddings (32-bit floating-point precision), using cosine distance as a similarity measure. The search returns the top-$k$ articles whose embeddings are most similar to the query vector, where smaller cosine-distance values indicate higher semantic similarity. The identifiers of the retrieved articles are then used to retrieve metadata and geographic information from the SQLite database.
+To retrieve articles on our topic, a natural-language query is encoded into a vector representation and compared to the stored article embeddings (32-bit floating-point precision) using cosine distance. The semantic search returns the top-$k$ articles whose embeddings are most similar to the query vector, with smaller cosine-distance values indicating higher semantic similarity. The identifiers of the retrieved articles are then used to obtain metadata and geographic information from the SQLite database.
 
 \subsection{Curation Pipeline}
 \label{sec:pipeline}
-Using the semantic retrieval and structured querying described above, we construct an initial dataset of 500{,}000 articles. We then reduce to approximately 365{,}000 articles in two filtering steps:
+Using the semantic retrieval and structured querying described above, we construct an initial dataset of 500{,}000 articles. We then reduce this set to approximately 365{,}000 articles in two filtering steps:
 \begin{itemize}[label=--, leftmargin=1.4em, topsep=0pt, partopsep=0pt, itemsep=1pt, parsep=0pt]
-  \item Articles must contain at least one German NUTS location (fr.\ \emph{Nomenclature des unités territoriales statistiques}). Each article is associated with the locations mentioned in its content. As articles published by German outlets may report on femicide cases outside Germany, this filter restricts the dataset to articles that reference at least one location within Germany.
+  \item Articles must contain at least one German NUTS location (fr.\ \emph{Nomenclature des unités territoriales statistiques}). Each article is associated with the locations mentioned in its content. As articles published by German outlets may report on femicide cases outside Germany, this filter restricts the dataset to articles that report on cases occurring in Germany.
   \item Articles must have a publication date between 2017 and 2023. Since the crawling of the news corpus started in August 2016 and ended in December 2023, coverage outside the full years 2017--2023 is incomplete. 
 \end{itemize}
-After the two filtering steps, we apply a cosine-distance threshold of $t = 0.225$ and retain only articles with $\mathrm{cos\_dist} \le t$. This results in a dataset of 31{,}368 articles. Below, we explain how the query and the threshold were chosen, with both steps relying on sampling and manual annotation.
+After the two filtering steps, we apply a cosine-distance threshold of $t = 0.225$ and retain only articles with $\mathrm{cos\_dist} \le t$. This results in a dataset of 31{,}368 articles. Below, we explain how the query and the threshold were chosen, with both steps relying on manual annotation.
 \subsection{Manual Annotation Protocol}
 \label{sec:annotation}
 During the process of query and threshold selection, we manually label subsets of articles as either “relevant", “irrelevant”, or "unknown". The category “relevant” comprises any report on a woman or girl killed, including cases in which the killing is suspected, or respective court hearings. Articles classified as “irrelevant” cover cases of attempted murder, sexual assault, rape, suicide, fictional cases of femicide, or unrelated topics. The category "unknown" includes articles whose relevance cannot be determined due to a lack of article access (e.g., due to paywalls, 404 errors, or redirects). In some cases, relevance can be determined from available information, such as preview text, URL text, or by locating the same article on an alternative website.
@@ -277,7 +284,9 @@ where $n_\ell(t)$ is the number of samples that fall into $B_\ell(t)$, and the p
 + \hat r_\ell(t) N_\ell(t)}{\displaystyle\sum_{k=1}^{\ell-1} N_k + N_\ell(t)}.
 \]
 \textbf{Bootstrap Confidence Intervals.}
-In addition to computing $\hat p(t)$ for a set of candidate thresholds, we construct confidence intervals to quantify uncertainty in $\hat p(t)$ by using a stratified bootstrap. For each bootstrap replicate $b=1,\dots,5000$, we draw $n_k$ samples with replacement from each $B_k$, and we recompute $\hat p(t)$ for all thresholds $t$ under consideration. This yields, for each threshold $t$, a bootstrap distribution
+In addition to computing $\hat p(t)$ for a set of candidate thresholds, we construct confidence intervals using a stratified bootstrap. 
+For each bootstrap replicate $b=1,\dots,5000$, $n_k$ samples are drawn with replacement from each $B_k$, and $\hat p(t)$ is recomputed for all thresholds $t$ under consideration. 
+This yields, for each threshold $t$, a bootstrap distribution
 \[
 \{\hat p^{(1)}(t),\hat p^{(2)}(t),\dots,\hat p^{(5000)}(t)\},
 \]
@@ -299,15 +308,15 @@ $t$ & $|\mathcal{D}(t)|$ & $\hat p(t)$ & 95\% CI \\
 \midrule
 0.200 & 2{,}130   & 0.993 & [0.978,\,1.000] \\
 0.205 & 4{,}370   & 0.996 & [0.989,\,1.000] \\
-0.210 & 7{,}815   & 0.978 & [0.930,\,1.000] \\
-0.215 & 13{,}351  & 0.967 & [0.925,\,0.999] \\
-0.220 & 21{,}192  & 0.931 & [0.889,\,0.966] \\
-0.225 & 31{,}368  & 0.911 & [0.853,\,0.959] \\
-0.230 & 44{,}232  & 0.899 & [0.846,\,0.944] \\
-0.235 & 59{,}803  & 0.839 & [0.781,\,0.892] \\
-0.240 & 78{,}943  & 0.801 & [0.745,\,0.854] \\
-0.245 & 102{,}474 & 0.763 & [0.705,\,0.820] \\
-0.250 & 132{,}083 & 0.677 & [0.615,\,0.737] \\
+0.210 & 7{,}815   & 0.978 & [0.929,\,1.000] \\
+0.215 & 13{,}351  & 0.967 & [0.927,\,0.999] \\
+0.220 & 21{,}192  & 0.931 & [0.889,\,0.970] \\
+0.225 & 31{,}368  & 0.911 & [0.853,\,0.958] \\
+0.230 & 44{,}232  & 0.899 & [0.843,\,0.947] \\
+0.235 & 59{,}803  & 0.839 & [0.779,\,0.895] \\
+0.240 & 78{,}943  & 0.801 & [0.743,\,0.858] \\
+0.245 & 102{,}474 & 0.763 & [0.703,\,0.820] \\
+0.250 & 132{,}083 & 0.677 & [0.614,\,0.737] \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -315,7 +324,7 @@ Prior work suggests that precision values above $90\%$ are often desirable when 
 
 \section{Results}\label{sec:results}
 
-Our final dataset provides a starting point for investigating patterns of media attention. To illustrate potential use cases, we compare article counts with the number of femicides\footnote{Data on femicides were obtained from the official German police crime statistics for 2017–2023 \citep{bkaPolizeilicheKriminalstatistik}.}. Specifically, we examine patterns of over- or underreporting by predicting the number of articles published in a NUTS region from the number of femicides in that region 
+Our final dataset provides a starting point for investigating patterns of media attention on femicides. To illustrate potential use cases, we compare article counts with the number of femicides\footnote{Data on femicides were obtained from the official German police crime statistics for 2017–2023 \citep{bkaPolizeilicheKriminalstatistik}.}. Specifically, we examine patterns of over- or underreporting by predicting the number of articles published in a NUTS region from the number of femicides in that region 
 in the same year, the previous year, and two years prior to account for continued reporting. A centered year variable tests for average temporal trends in news publishing. We control for regional heterogeneity by including random intercepts for NUTS regions, and for population size by using it as a log-offset. Given the count nature and overdispersion of the data, we estimate a negative binomial mixed-effects model \citep{zeileis2008regressionmodelscount}. 
 
 Results show that femicides in the same year significantly predict media coverage ($\beta = .22$, $p < .001$), indicating that on average, each additional femicide in a region and year is associated with approximately $100\cdot(1-e^{0.22}) \approx 24 \%$ more articles, while holding other predictors constant. Lagged femicide counts and the centered year do not significantly predict articles (all $p~\geq~.266$), indicating that coverage is largely contemporaneous and shows no clear linear time trend. The random intercepts reveal substantial regional heterogeneity in baseline media coverage ($SD~=~1.07$ on the log scale), corresponding to nearly a threefold difference in expected article counts between comparable regions.
@@ -339,22 +348,38 @@ For visualization, we focus on 2019 as an illustrative example (cf. Fig. \ref{fi
 \vspace{-22pt}
 
 \section{Discussion \& Conclusion}\label{sec:conclusion}
-Our work focuses on the quality of the data returned by a single query. Cosine distances vary between queries, but do not indicate "higher" relevance to the overall topic [Figure ~\ref{fig:cosine-dists}]. The threshold determined for this dataset would not apply to results from other queries. Additionally, the final dataset based on one query represents a sample of the data skewed towards the query we selected; other queries included relevant articles in their top results that were not a part of our final dataset. That said, our initial dataset is large and reliable enough to see geographic patterns as the starting point for further analysis.
+%Our work focuses on the quality of the data returned by a single query. Cosine distances vary between queries, but do not indicate "higher" relevance to the overall topic [Figure~\ref{fig:cosine-dists}]. The threshold determined for this dataset would not apply to results from other queries. Additionally, the final dataset based on one query represents a sample of the data skewed towards the query we selected; other queries included relevant articles in their top results that were not a part of our final dataset. That said, our initial dataset is large and reliable enough to see geographic patterns as the starting point for further analysis.
 
-Next, similar cosine distances indicate similar articles, which helps in annotating multiple reports on the same case and also indicates duplicate articles. Some duplicate cosine distances were for the same article under different publishers, others appear to be duplicates but have minor differences in text. Retaining only one article per cosine distance and publisher does not impact the top 50 of our selected query, and would remove only 1173 articles from our final dataset. 
+%Next, similar cosine distances indicate similar articles, which helps in annotating multiple reports on the same case and also indicates duplicate articles. Some duplicate cosine distances were for the same article under different publishers, others appear to be duplicates but have minor differences in text. Retaining only one article per cosine distance and publisher does not impact the top 50 of our selected query, and would remove only 1173 articles from our final dataset. 
 
-Finally, the geolocated news articles can be linked to their original Common Crawl sources to retrieve full article text. While outside the scope of this case study, this could address the challenge of broken URLs and offer further opportunities for data validation and analysis.
+%Finally, the geolocated news articles can be linked to their original Common Crawl sources to retrieve full article text. While outside the scope of this case study, this could address the challenge of broken URLs and offer further opportunities for data validation and analysis.
+
+%However, the final dataset is reliable and precise enough to identify patterns in spatial and temporal analysis.
+%However, the final dataset reflects quality and precision to enable spatial and temporal analysis to identify reliable patterns. A limitation in the study was duplicate cases where similar cosine distances count for similar or duplicate articles. For example, some articles appear to be duplicates but have minor text variations or when same articles are under different publishers. Removing 1173 such cases had trivial impact on the dataset size.(DIDNT REMOVE)(The 1173 refers to duplicates where cosine distance AND publisher are the same) 
+
+This research presents a transparent and reproducible data curation pipeline to build a dataset of articles on femicide from a German news corpus. Using semantic retrieval along with manual annotation, query selection, and threshold selection, we build a final dataset of 31,368 articles with an estimated precision of more than 90\%.
+
+This process captures data quality returned by a single semantic query. Query-specific cosine distances vary and do not indicate "higher" relevance to the overall topic. The selected threshold is specific to the chosen query and cannot be applied to other queries. Additionally, the final dataset based on one query represents a sample of the data skewed towards the query we selected; other queries included relevant articles in their top results that were not a part of our final dataset. That said, the resulting dataset is sufficiently large and reliable to see geographic and temporal patterns, and can serve as a starting point for further analysis.
+
+Lastly, avenues for further analysis exist that could not be explored due to time and scope constraints. In particular, we encountered instances of duplicate articles. Articles with equal cosine distances from the same publisher may indicate duplicate content, and we identified 1{,}173 such cases. Additional work is required to reliably identify and handle duplicate articles.
+
+Finally, the geolocated news articles can be linked to their original Common Crawl sources to retrieve full article text. This could address the challenge of broken URLs and offer further opportunities for data validation and analysis.
+
+%In addition, the geolocated news articles can be linked to their original Common Crawl sources to retrieve full article text or excerpts. This could address the broken URLs and offers opportunities for data validation and analysis.
+
+%Furthermore, avenues for further analysis exist which could not be explored due to time and scope constraints. Exploration is not limited, but include validating the accuracy of geolocated data, resolving duplicate cases, and analyse the direct link between CommonCrawl sources and the news articles dataset to handle broken URLS where article titles, texts and excerpts associated with the URL data can be retrieved.
+
 \newpage
 
 \section*{Contribution Statement}
 
-Rachel Amruthaluri ran background research on original dataset structure, curation methods, validation methods, and testing methods.
+Madeline Miller collected and prepared the query datasets, set up the manual annotation collection process, performed query selection and visualization, investigated duplicate impact, and set up the GitHub repository.
+
+Karoline Wolandt curated the additional crime dataset, conducted geospatial data analysis, planned and performed the regression analysis, and created visualizations.
 
 Zoe Kirsman designed and implemented the threshold selection procedure, including stratified sampling, precision estimation and bootstrap confidence intervals, and created visualizations.
 
-Madeline Miller collected and prepared the query datasets, set up the manual annotation collection process, performed query selection and visualization, and set up the GitHub repository.
-
-Karoline Wolandt curated the additional crime dataset, conducted geospatial data analysis, planned and performed the regression analysis, and created visualizations.
+Rachel Amruthaluri collected literature review, ran background research on original dataset structure, curation methods, validation methods, and testing methods.
 
 The text of the report was written jointly by all
 authors.
